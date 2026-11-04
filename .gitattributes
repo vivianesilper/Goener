@@ -1,0 +1,12 @@
+# Arquivos binários: o Git nunca deve converter quebras de linha neles
+*.pdf  binary
+*.xlsx binary
+*.png  binary
+
+# Textos com fim de linha normalizado
+*.py    text eol=lf
+*.md    text eol=lf
+*.sql   text eol=lf
+*.csv   text eol=lf
+*.ipynb text eol=lf
+*.txt   text eol=lf
