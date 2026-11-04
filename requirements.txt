@@ -1,0 +1,23 @@
+# Versões exatas usadas no desenvolvimento (Python 3.14.6).
+# Instalação: pip install -r requirements.txt
+# Para que serve cada biblioteca: ver a seção "Bibliotecas utilizadas" do README.md
+
+# --- Dados e cálculo ---
+pandas==2.3.3
+numpy==2.3.4
+openpyxl==3.1.5
+
+# --- Visualização e relatório ---
+matplotlib==3.10.8
+jinja2==3.1.6
+reportlab==5.1.0
+
+# --- Testes ---
+pytest==9.2.0
+
+# --- Notebook ---
+notebook==7.4.7
+ipython==9.6.0
+ipykernel==7.0.1
+nbconvert==7.16.6
+nbformat==5.10.4

@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Editores / sistema
+.idea/
+.vscode/
+Thumbs.db
+.DS_Store
+
+# Ferramentas internas de desenvolvimento
+.dev/
+
+# Pacote de entrega (gerado à parte)
+*.zip
+
+# Enunciado marcado como "Documento confidencial": vai apenas no zip enviado ao recrutador
+data/enunciado_case_goener.pdf
