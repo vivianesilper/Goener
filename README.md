@@ -201,12 +201,13 @@ A **causa provável** de cada divergência é encontrada recalculando o boleto c
 8. Cliente cancelado: o mês que **começa depois** da data de cancelamento não é cobrável (cancelou em 08/07 → julho ainda é cobrado, agosto não).
 9. A inadimplência considera só boletos legítimos. Um boleto duplicado em aberto é erro da Goener, não dívida do cliente (com eles, a taxa seria 14,37%).
 10. A economia do cliente é o valor da energia na tarifa Enel menos o boleto Goener efetivamente cobrado.
+11. Na data de corte (15/10/2026), boleto **pago no próprio dia 15/10 conta como pago**. Nenhum pagamento da base é posterior a essa data; só um foi feito exatamente nela (GB50385, R$ 562,51).
 
 ---
 
 ## Decisões de código
 - **Lógica em `src/`, apresentação no notebook:** funções pequenas, testáveis e reaproveitadas (as mesmas normalizações servem à limpeza e à validação).
-- **Nenhum valor fixo escondido:** tolerância, data de corte, formatos, cores e limites ficam em `config.py`. O SQL recebe os parâmetros do mesmo lugar.
+- **Nenhum valor fixo escondido:** tolerância, data de corte, formatos, cores e limites ficam em `config.py`. O SQL do notebook recebe os parâmetros do mesmo lugar; na versão SQL Server eles ficam em `DECLARE` no topo do script.
 - **Documentação gerada pelo código:** o `ERROS_E_LOGS.md` e o resumo executivo são montados a partir dos resultados e se atualizam a cada execução.
 - **Rastreabilidade:** cada registro tratado guarda `linha_origem` (a linha no Excel original), e o log usa o mesmo identificador.
 - **Leitura como texto:** o Excel é lido com `dtype=str`, para não perder zeros à esquerda nem esconder os formatos originais.

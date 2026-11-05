@@ -3,10 +3,17 @@ import pandas as pd
 
 from src import config as cfg
 
-COLUNAS_INTERNAS = ["registro"]  # usadas só para montar o log
+COLUNAS_INTERNAS = ["registro"]  # auxiliar das bases tratadas, usada só para montar o log
 
 
 def _limpar_para_saida(df):
+    """Tira as colunas auxiliares das bases tratadas (que têm `linha_origem` para rastreio).
+
+    O log de inconsistências não tem `linha_origem`: nele, `registro` é justamente o que
+    identifica o cliente, fatura ou boleto com problema, então é mantido.
+    """
+    if "linha_origem" not in df.columns:
+        return df
     return df.drop(columns=[c for c in COLUNAS_INTERNAS if c in df.columns])
 
 

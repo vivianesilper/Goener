@@ -76,7 +76,7 @@ def montar_conteudo(resumo, conciliacao, mensal, log, violacoes_original):
             f"<b>Cancelar os {len(indevidos)} boletos indevidos</b> antes do pagamento ({_mil(resumo['cobranca_indevida'])}).",
             f"<b>Emitir os {len(faltantes)} boletos que faltaram</b> ({_mil(resumo['receita_perdida'])}), conferindo o prazo contratual.",
             f"<b>Devolver ou abater {_mil(resumo['cobrado_a_maior'])}</b> dos {errados['id_cliente'].nunique()} clientes "
-            "cobrados a mais, avisando antes que eles percebam.",
+            "cobrados a mais, avisando os clientes de forma proativa.",
         ],
         "processo": [
             "<b>Ligar a trava automática</b> antes de cada emissão (já construída e testada): nenhum boleto "
