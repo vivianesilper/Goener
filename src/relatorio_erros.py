@@ -22,6 +22,10 @@ PREMISSAS = [
     "marcados para revisão, e a conciliação classifica o caso como **Inconclusivo**.",
     "Boletos duplicados **não são apagados** (são documentos financeiros): ficam marcados e viram "
     "**Cobrança indevida** na conciliação.",
+    "Na data de corte (15/10/2026), boleto **pago no próprio dia 15/10 conta como pago** (a data de "
+    "corte entra no período). A inadimplência usa o `status_pagamento` da base; isso equivale à "
+    "situação na data de corte porque nenhum pagamento é posterior a 15/10. Só um boleto foi pago "
+    "exatamente no dia 15/10 (GB50385, C1066, ref. ago/2026, R$ 562,51, vencido em 10/09).",
 ]
 
 
