@@ -34,7 +34,7 @@ A Goener cobra os clientes pela energia solar que aparece como **energia compens
 | 2 | Base tratada + conciliação + log de inconsistências | [`output/base_tratada.xlsx`](output/base_tratada.xlsx) |
 | 3 | Resumo executivo (1 página) | [`output/resumo_executivo.pdf`](output/resumo_executivo.pdf) e seção final do notebook |
 | + | Todos os erros documentados, com decisão e justificativa | [`ERROS_E_LOGS.md`](ERROS_E_LOGS.md) |
-| + | Diferencial: SQL | [`sql/consultas.sql`](sql/consultas.sql) |
+| + | Diferencial: SQL | [`sql/consultas.sql`](sql/consultas.sql) (SQLite, roda no notebook) e [`sql/sqlserver/`](sql/sqlserver/) (versão T-SQL para SQL Server, testada com os mesmos resultados) |
 | + | Diferencial: Power BI | [`docs/GUIA_POWERBI.md`](docs/GUIA_POWERBI.md) + [`output/powerbi/`](output/powerbi/) |
 | + | Diferencial: Microsoft Fabric / API | [`docs/PROPOSTA_FABRIC.md`](docs/PROPOSTA_FABRIC.md) |
 
@@ -126,7 +126,8 @@ Case_Goener/
 │   ├── relatorio_erros.py     ← gera o ERROS_E_LOGS.md
 │   └── resumo_executivo.py    ← gera o resumo em PDF e HTML
 ├── sql/
-│   └── consultas.sql          ← conferência independente em SQL
+│   ├── consultas.sql          ← conferência independente em SQL (SQLite)
+│   └── sqlserver/             ← mesma conferência em T-SQL: 01_carga.sql e 02_consultas.sql
 ├── tests/                     ← 75 testes (pytest)
 │   ├── test_normalizacao.py
 │   ├── test_validacao.py

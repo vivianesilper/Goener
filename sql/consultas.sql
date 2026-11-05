@@ -1,6 +1,6 @@
 -- =============================================================================
--- Consultas SQL do case Goener (SQLite, mas usam SQL padrão e rodam no Fabric/SQL Server
--- com ajustes mínimos de funções de data).
+-- Consultas SQL do case Goener, no dialeto do SQLite (usado pelo Python em src/consultas_sql.py).
+-- Versão para SQL Server (T-SQL), testada e com os mesmos resultados: sql/sqlserver/.
 --
 -- Servem como CONFERÊNCIA INDEPENDENTE: recalculam com SQL o que o Python calculou.
 -- Se os resultados batem, a lógica está certa nas duas linguagens.
