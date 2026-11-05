@@ -22,7 +22,8 @@ SET NOCOUNT ON;
 DROP TABLE IF EXISTS dbo.conciliacao, dbo.cobrancas, dbo.faturas, dbo.clientes;
 
 -- UC, CPF/CNPJ e ids são TEXTO: preservam os zeros à esquerda.
--- Números com casas fixas (DECIMAL), para todos aparecerem no mesmo formato:
+-- O CSV está no padrão brasileiro (341,15 e separador ;). Os números entram como texto e,
+-- depois da carga, são convertidos para DECIMAL com casas fixas:
 --   desconto com 2 casas (0.15, 0.20), tarifa com 4 (0.9184), kWh e valores em R$ com 2.
 CREATE TABLE dbo.clientes (
     linha_origem        INT,
@@ -32,7 +33,7 @@ CREATE TABLE dbo.clientes (
     tipo_documento      VARCHAR(4),
     uc                  CHAR(10),
     cidade              NVARCHAR(60),
-    desconto_contratado DECIMAL(4, 2),
+    desconto_contratado VARCHAR(20),     -- vira DECIMAL(4, 2) após a carga
     data_adesao         DATE,
     status              VARCHAR(10),
     data_cancelamento   DATE,
@@ -45,9 +46,9 @@ CREATE TABLE dbo.faturas (
     uc                     CHAR(10),
     id_cliente             VARCHAR(10),
     mes_referencia         DATE,
-    consumo_kwh            DECIMAL(12, 2),
-    energia_compensada_kwh DECIMAL(12, 2),
-    tarifa_kwh             DECIMAL(8, 4),
+    consumo_kwh            VARCHAR(20),     -- vira DECIMAL(12, 2) após a carga
+    energia_compensada_kwh VARCHAR(20),     -- vira DECIMAL(12, 2) após a carga
+    tarifa_kwh             VARCHAR(20),     -- vira DECIMAL(8, 4) após a carga
     flag_revisao           VARCHAR(6),  -- True/False no CSV; vira BIT após a carga
     motivo_revisao         NVARCHAR(400)
 );
@@ -57,7 +58,7 @@ CREATE TABLE dbo.cobrancas (
     id_cobranca        VARCHAR(10),
     id_cliente         VARCHAR(10),
     mes_referencia     DATE,
-    valor_cobrado      DECIMAL(12, 2),
+    valor_cobrado      VARCHAR(20),     -- vira DECIMAL(12, 2) após a carga
     data_vencimento    DATE,
     data_pagamento     DATE,
     status_pagamento   VARCHAR(12),
@@ -77,20 +78,20 @@ CREATE TABLE dbo.conciliacao (
     data_cancelamento      DATE,
     uc                     CHAR(10),
     mes_referencia         DATE,
-    consumo_kwh            DECIMAL(12, 2),
-    energia_compensada_kwh DECIMAL(12, 2),
-    tarifa_kwh             DECIMAL(8, 4),
-    desconto_contratado    DECIMAL(4, 2),
-    valor_esperado         DECIMAL(12, 2),
+    consumo_kwh            VARCHAR(20),     -- vira DECIMAL(12, 2) após a carga
+    energia_compensada_kwh VARCHAR(20),     -- vira DECIMAL(12, 2) após a carga
+    tarifa_kwh             VARCHAR(20),     -- vira DECIMAL(8, 4) após a carga
+    desconto_contratado    VARCHAR(20),     -- vira DECIMAL(4, 2) após a carga
+    valor_esperado         VARCHAR(20),     -- vira DECIMAL(12, 2) após a carga
     id_cobranca            VARCHAR(10),
-    valor_cobrado          DECIMAL(12, 2),
-    diferenca              DECIMAL(12, 2),
-    valor_a_maior          DECIMAL(12, 2),
-    valor_a_menor          DECIMAL(12, 2),
-    receita_perdida        DECIMAL(12, 2),
-    valor_indevido         DECIMAL(12, 2),
-    economia_contratada    DECIMAL(12, 2),
-    economia_real          DECIMAL(12, 2),
+    valor_cobrado          VARCHAR(20),     -- vira DECIMAL(12, 2) após a carga
+    diferenca              VARCHAR(20),     -- vira DECIMAL(12, 2) após a carga
+    valor_a_maior          VARCHAR(20),     -- vira DECIMAL(12, 2) após a carga
+    valor_a_menor          VARCHAR(20),     -- vira DECIMAL(12, 2) após a carga
+    receita_perdida        VARCHAR(20),     -- vira DECIMAL(12, 2) após a carga
+    valor_indevido         VARCHAR(20),     -- vira DECIMAL(12, 2) após a carga
+    economia_contratada    VARCHAR(20),     -- vira DECIMAL(12, 2) após a carga
+    economia_real          VARCHAR(20),     -- vira DECIMAL(12, 2) após a carga
     data_vencimento        DATE,
     data_pagamento         DATE,
     status_pagamento       VARCHAR(12),
@@ -99,15 +100,15 @@ CREATE TABLE dbo.conciliacao (
     origem                 NVARCHAR(30)
 );
 
--- CSV em UTF-8, com cabeçalho e textos entre aspas quando têm vírgula.
+-- CSV em UTF-8, padrão brasileiro: separador ; e vírgula decimal. Textos com ; vêm entre aspas.
 BULK INSERT dbo.clientes    FROM '$(PASTA_CSV)\dim_clientes.csv'
-    WITH (FORMAT = 'CSV', CODEPAGE = '65001', FIRSTROW = 2, FIELDTERMINATOR = ',', ROWTERMINATOR = '0x0a');
+    WITH (FORMAT = 'CSV', CODEPAGE = '65001', FIRSTROW = 2, FIELDTERMINATOR = ';', ROWTERMINATOR = '0x0a');
 BULK INSERT dbo.faturas     FROM '$(PASTA_CSV)\fato_faturas.csv'
-    WITH (FORMAT = 'CSV', CODEPAGE = '65001', FIRSTROW = 2, FIELDTERMINATOR = ',', ROWTERMINATOR = '0x0a');
+    WITH (FORMAT = 'CSV', CODEPAGE = '65001', FIRSTROW = 2, FIELDTERMINATOR = ';', ROWTERMINATOR = '0x0a');
 BULK INSERT dbo.cobrancas   FROM '$(PASTA_CSV)\fato_cobrancas.csv'
-    WITH (FORMAT = 'CSV', CODEPAGE = '65001', FIRSTROW = 2, FIELDTERMINATOR = ',', ROWTERMINATOR = '0x0a');
+    WITH (FORMAT = 'CSV', CODEPAGE = '65001', FIRSTROW = 2, FIELDTERMINATOR = ';', ROWTERMINATOR = '0x0a');
 BULK INSERT dbo.conciliacao FROM '$(PASTA_CSV)\fato_conciliacao.csv'
-    WITH (FORMAT = 'CSV', CODEPAGE = '65001', FIRSTROW = 2, FIELDTERMINATOR = ',', ROWTERMINATOR = '0x0a');
+    WITH (FORMAT = 'CSV', CODEPAGE = '65001', FIRSTROW = 2, FIELDTERMINATOR = ';', ROWTERMINATOR = '0x0a');
 
 -- O CSV traz booleanos como True/False, que o BULK INSERT não converte para BIT.
 -- Converte aqui (e remove um eventual CR, CHAR(13), de fim de linha do Windows).
@@ -122,6 +123,34 @@ SELECT @sql += N'UPDATE dbo.' + QUOTENAME(tabela) + N' SET ' + QUOTENAME(coluna)
              + N'ALTER TABLE dbo.' + QUOTENAME(tabela) + N' ALTER COLUMN ' + QUOTENAME(coluna) + N' BIT; '
 FROM @colunas;
 EXEC sys.sp_executesql @sql;
+
+-- Números: troca a vírgula decimal por ponto e converte para DECIMAL.
+DECLARE @numericos TABLE (tabela SYSNAME, coluna SYSNAME, tipo NVARCHAR(20));
+INSERT INTO @numericos VALUES
+    ('clientes', 'desconto_contratado', 'DECIMAL(4, 2)'),
+    ('faturas', 'consumo_kwh', 'DECIMAL(12, 2)'),
+    ('faturas', 'energia_compensada_kwh', 'DECIMAL(12, 2)'),
+    ('faturas', 'tarifa_kwh', 'DECIMAL(8, 4)'),
+    ('cobrancas', 'valor_cobrado', 'DECIMAL(12, 2)'),
+    ('conciliacao', 'consumo_kwh', 'DECIMAL(12, 2)'),
+    ('conciliacao', 'energia_compensada_kwh', 'DECIMAL(12, 2)'),
+    ('conciliacao', 'tarifa_kwh', 'DECIMAL(8, 4)'),
+    ('conciliacao', 'desconto_contratado', 'DECIMAL(4, 2)'),
+    ('conciliacao', 'valor_esperado', 'DECIMAL(12, 2)'),
+    ('conciliacao', 'valor_cobrado', 'DECIMAL(12, 2)'),
+    ('conciliacao', 'diferenca', 'DECIMAL(12, 2)'),
+    ('conciliacao', 'valor_a_maior', 'DECIMAL(12, 2)'),
+    ('conciliacao', 'valor_a_menor', 'DECIMAL(12, 2)'),
+    ('conciliacao', 'receita_perdida', 'DECIMAL(12, 2)'),
+    ('conciliacao', 'valor_indevido', 'DECIMAL(12, 2)'),
+    ('conciliacao', 'economia_contratada', 'DECIMAL(12, 2)'),
+    ('conciliacao', 'economia_real', 'DECIMAL(12, 2)');
+DECLARE @sql_num NVARCHAR(MAX) = N'';
+SELECT @sql_num += N'UPDATE dbo.' + QUOTENAME(tabela) + N' SET ' + QUOTENAME(coluna)
+                 + N' = REPLACE(' + QUOTENAME(coluna) + N', '','', ''.''); '
+                 + N'ALTER TABLE dbo.' + QUOTENAME(tabela) + N' ALTER COLUMN ' + QUOTENAME(coluna) + N' ' + tipo + N'; '
+FROM @numericos;
+EXEC sys.sp_executesql @sql_num;
 
 -- Remove o CR, CHAR(13), que sobra na última coluna quando o CSV tem quebra de linha do Windows (CRLF).
 UPDATE dbo.clientes    SET motivo_revisao = NULLIF(REPLACE(motivo_revisao, CHAR(13), ''), '');

@@ -31,17 +31,18 @@ log_inconsistencias          → tabela solta (página de qualidade de dados)
 
 ## 2. Importar sem erro de número (importante!)
 
-Os CSVs usam **ponto decimal** (`0.15`) e datas `AAAA-MM-DD`. Se o seu Power BI estiver em português, ele pode ler `0.15` como **15**.
+Os CSVs estão no **padrão brasileiro**: separador `;`, vírgula decimal (`341,15`, `0,15`) e datas `AAAA-MM-DD`. O Power BI em português lê direto, **sem configurar localidade**.
 
-1. **Obter dados → Texto/CSV**, escolha o arquivo e clique em **Transformar dados**.
-2. No Power Query, selecione as colunas numéricas e de data → botão direito → **Alterar tipo → Usando localidade…** → tipo *Número decimal* (ou *Data*) e localidade **Inglês (Estados Unidos)**.
-3. Confira os tipos:
+> Se o seu Power BI estiver em inglês, faça o contrário: em **Arquivo → Opções → Configurações regionais (arquivo atual)**, escolha **Português (Brasil)** em *Localidade para importação*.
+
+1. **Obter dados → Texto/CSV**, escolha o arquivo e clique em **Transformar dados**. Confira se o delimitador detectado é **Ponto e vírgula**.
+2. Confira os tipos:
    - `uc`, `cpf_cnpj`, `id_cliente`, `id_cobranca` → **Texto** (para não perder os zeros à esquerda)
    - `vencida`, `vencida_nao_paga`, `flag_revisao`, `cobranca_duplicada` → **Verdadeiro/Falso**
    - `mes_referencia`, `data_*` → **Data**
-4. Repita para cada arquivo e clique em **Fechar e aplicar**.
+3. Repita para cada arquivo e clique em **Fechar e aplicar**.
 
-> Dica: importe a pasta inteira de uma vez com **Obter dados → Pasta** se preferir, mas a configuração de localidade continua necessária.
+> Atenção: **não** use *Obter dados → Pasta → Combinar*. Essa opção empilha arquivos com as mesmas colunas, e aqui cada CSV tem colunas diferentes. Se quiser partir da pasta, use **Transformar dados** e clique em **Binary** na linha de cada arquivo para abri-lo como uma consulta separada (escolha **Ponto e vírgula** como delimitador).
 
 ## 3. Relacionamentos (Exibição de modelo)
 
@@ -118,6 +119,19 @@ CALCULATE (
 **Conferência:** sem filtros, os cartões devem mostrar Cobrado a Maior = **R$ 6.058,61**, Receita Perdida = **R$ 10.978,82**, Cobrança Indevida = **R$ 12.217,97** e Inadimplência = **12,78%**. São os mesmos números do notebook.
 
 Formatos: medidas em R$ → *Moeda, 2 casas*; percentuais → *Porcentagem, 1 casa*.
+
+Formate também as colunas (modo de exibição de **Tabela** → clique na coluna → **Ferramentas de coluna**). Com o formato *Geral*, o Power BI corta zeros no final (`0,2` ao lado de `0,15`):
+
+| Coluna | Formato | Casas |
+|---|---|---|
+| Valores em R$ (`valor_cobrado`, `valor_esperado`, `diferenca`, `valor_a_maior`, `valor_a_menor`, `receita_perdida`, `valor_indevido`, `economia_*`, `valor_faturado`, `total_vencido`, `vencido_nao_pago`) | Moeda (R$) | 2 |
+| `desconto_contratado` | Porcentagem (`15%`, `20%`) | 0 |
+| `inadimplencia` | Porcentagem | 1 |
+| `tarifa_kwh` | Número decimal | 4 |
+| `consumo_kwh`, `energia_compensada_kwh` | Número inteiro, com separador de milhar | 0 |
+| `casos_com_erro` | Número inteiro | 0 |
+
+> Os CSVs já saem arredondados (R$ e kWh com 2 casas; tarifa, desconto e taxas com 4) e com vírgula decimal. O formato acima é só a exibição: com **Moeda R$ Português (Brasil)**, os valores aparecem como `R$ 3.424,53`.
 
 ## 5. Layout sugerido (4 páginas)
 
