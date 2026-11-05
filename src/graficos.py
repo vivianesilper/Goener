@@ -52,8 +52,8 @@ def cartoes_indicadores(resumo):
         ("Deixou de ser faturado", reais(resumo["receita_perdida"]), "faturas da Enel sem boleto"),
         ("Cobrança indevida", reais(resumo["cobranca_indevida"]),
          f"{reais(resumo['cobranca_indevida_ja_paga'])} já pagos: dá para cancelar"),
-        ("Economia gerada", reais(resumo["economia_real"]),
-         f"contratada: {reais(resumo['economia_contratada'])}"),
+        ("Economia recebida", reais(resumo["economia_real"]),
+         f"prometida no contrato: {reais(resumo['economia_contratada'])}"),
         ("Inadimplência", f"{resumo['inadimplencia']:.1%}".replace(".", ","),
          f"{reais(resumo['vencido_nao_pago'])} vencidos e não pagos"),
     ]
@@ -115,24 +115,24 @@ def grafico_impacto_mensal(mensal):
 
 
 def grafico_economia_mensal(mensal):
-    """Economia que o cliente deveria ter (contratada) × a que teve de fato (real)."""
+    """Economia prometida no contrato × economia que o cliente recebeu de fato (com os erros)."""
     meses = [_mes(m) for m in mensal.index]
     fig, ax = plt.subplots(figsize=(9, 4))
     ax.plot(meses, mensal["economia_contratada"], color=cfg.COR_NEUTRA, linewidth=2, marker="o",
-            markersize=7, label="Economia contratada (sem erros)")
+            markersize=7, label="Economia prometida (contrato)")
     ax.plot(meses, mensal["economia_real"], color=cfg.COR_MARCA, linewidth=2, marker="o", markersize=7,
-            markeredgecolor="white", markeredgewidth=2, label="Economia real")
+            markeredgecolor="white", markeredgewidth=2, label="Economia recebida (com os erros)")
     ax.fill_between(meses, mensal["economia_real"], mensal["economia_contratada"], color=cfg.COR_NEUTRA, alpha=0.2)
     pior = (mensal["economia_contratada"] - mensal["economia_real"]).idxmax()
     perda = mensal.loc[pior, "economia_contratada"] - mensal.loc[pior, "economia_real"]
     x = list(mensal.index).index(pior)
-    ax.annotate(f"{reais(perda)} de economia\nperdida em {_mes(pior)}", (x, mensal.loc[pior, "economia_real"]),
+    ax.annotate(f"{reais(perda)} cobrados a mais dos\nclientes em {_mes(pior)} (a devolver)", (x, mensal.loc[pior, "economia_real"]),
                 xytext=(x + 0.35, mensal["economia_real"].min() - 400), fontsize=9, color=cfg.COR_TEXTO,
                 arrowprops={"arrowstyle": "-", "color": cfg.COR_TEXTO_SECUNDARIO, "linewidth": 0.8})
     _eixo_reais(ax)
     ax.set_ylim(mensal["economia_real"].min() * 0.85, mensal["economia_contratada"].max() * 1.08)
-    ax.set_title("Economia gerada para os clientes", pad=24)
-    _subtitulo(ax, "Valor da energia na tarifa Enel menos o boleto Goener (R$)")
+    ax.set_title("Economia dos clientes: prometida × recebida", pad=24)
+    _subtitulo(ax, "Quanto o cliente deixou de pagar à Enel graças ao desconto Goener (R$)")
     ax.legend(loc="upper left", ncols=2)
     return fig
 

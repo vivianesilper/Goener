@@ -18,7 +18,7 @@ A Goener cobra os clientes pela energia solar que aparece como **energia compens
 | Cobrado a menos | **R$ 0,00**: todo erro foi contra o cliente |
 | Deixou de ser faturado (6 faturas sem boleto) | **R$ 10.978,82** |
 | Cobranças indevidas (8 boletos, nenhum pago) | **R$ 12.217,97** |
-| Economia gerada para os clientes | **R$ 111.209,15** (seriam R$ 117.267,76 sem erros) |
+| Economia recebida pelos clientes | **R$ 111.209,15** (o contrato prometia R$ 117.267,76; a diferença foi cobrada a mais) |
 | Inadimplência na data de corte (15/10/2026) | **12,78%** |
 | Problemas de dados encontrados e tratados | **23 tipos**, 2.825 violações de formato na base original |
 

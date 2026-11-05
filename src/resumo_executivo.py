@@ -60,8 +60,9 @@ def montar_conteudo(resumo, conciliacao, mensal, log, violacoes_original):
              f"{len(indevidos)} boletos, {'nenhum' if not resumo['cobranca_indevida_ja_paga'] else 'alguns'} pago"),
             ("Inadimplência", _pct(resumo["inadimplencia"]), f"{_mil(resumo['vencido_nao_pago'])} vencidos"),
         ],
-        "economia": (f"Mesmo com os erros, a Goener gerou <b>{_mil(resumo['economia_real'])}</b> de economia para "
-                     f"os clientes. Sem os erros, seriam {_mil(resumo['economia_contratada'])}."),
+        "economia": (f"Com o desconto Goener, os clientes economizaram <b>{_mil(resumo['economia_real'])}</b> "
+                     f"(economia recebida). O contrato prometia {_mil(resumo['economia_contratada'])}: "
+                     f"a diferença foi cobrada a mais e precisa ser devolvida."),
         "causas": [
             f"<b>Desconto não aplicado</b>: {sem_desconto[0]} boletos cobraram o valor cheio da energia ({_mil(sem_desconto[1])}).",
             f"<b>Cálculo sobre o consumo total</b> em vez da energia solar compensada: {sobre_consumo[0]} boletos ({_mil(sobre_consumo[1])}).",

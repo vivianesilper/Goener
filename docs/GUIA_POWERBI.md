@@ -81,9 +81,9 @@ CALCULATE (
 
 % Impacto sobre Faturado = DIVIDE ( [Impacto Total], [Valor Faturado] )
 
-Economia Real = SUM ( fato_conciliacao[economia_real] )
+Economia Recebida = SUM ( fato_conciliacao[economia_real] )
 
-Economia Contratada = SUM ( fato_conciliacao[economia_contratada] )
+Economia Prometida = SUM ( fato_conciliacao[economia_contratada] )
 
 Total Vencido =
 CALCULATE (
@@ -129,7 +129,7 @@ Cores: verde-petróleo Goener `#0f6e73` para títulos e séries únicas. Para os
 │ [Segmentação: mes_ano]   [Segmentação: cidade]   [status_cliente]│
 ├──────────┬──────────┬──────────┬──────────┬──────────┬───────────┤
 │ Cobrado  │ Receita  │ Cobrança │ Impacto  │ Economia │ Inadim-   │
-│ a Maior  │ Perdida  │ Indevida │ Total    │ Real     │ plência % │
+│ a Maior  │ Perdida  │ Indevida │ Total    │ Recebida │ plência % │
 ├──────────┴──────────┴──────────┴─┬────────┴──────────┴───────────┤
 │ Colunas empilhadas:              │ Barras: Casos por             │
 │ Impacto por mês, por tipo        │ classificacao                 │
@@ -144,7 +144,7 @@ Cores: verde-petróleo Goener `#0f6e73` para títulos e séries únicas. Para os
 
 ### Página 3: Inadimplência e economia
 - **Colunas**: Inadimplência % por `mes_ano`.
-- **Linhas**: Economia Real × Economia Contratada por `mes_ano`.
+- **Linhas**: Economia Prometida × Economia Recebida por `mes_ano` (a diferença é o que foi cobrado a mais e precisa ser devolvido).
 - **Cartões**: Total Vencido e Vencido Não Pago.
 
 ### Página 4: Qualidade dos dados
