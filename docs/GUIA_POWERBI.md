@@ -145,14 +145,13 @@ Casos = COUNTROWS ( conciliacao )
 Casos com Erro =
 CALCULATE (
     [Casos],
-    conciliacao[classificacao] IN { "Cobrado a maior", "Cobrado a menor",
-                                         "Fatura sem cobrança", "Cobrança indevida" }
+    NOT conciliacao[classificacao] IN { "OK", "Não cobrável (cliente cancelado)", "Inconclusivo" }
 )
 
 % Casos OK = DIVIDE ( CALCULATE ( [Casos], conciliacao[classificacao] = "OK" ), [Casos] )
 ```
 
-**Conferência:** sem filtros, os cartões devem mostrar Cobrado a Maior = **R$ 6.058,61**, Receita Perdida = **R$ 10.978,82**, Cobrança Indevida = **R$ 12.217,97** e Inadimplência = **12,78%**. São os mesmos números do notebook.
+**Conferência:** sem filtros, os cartões devem mostrar Cobrado a Maior = **R$ 6.058,61**, Receita Perdida = **R$ 10.978,82**, Cobrança Indevida = **R$ 12.217,97** , Impacto Total = **R$ 29.255,40**, Inadimplência = **12,78%** e Casos com Erro = **32** (inclui as 3 faturas sem cliente cadastrado). São os mesmos números do notebook.
 
 Formatos: medidas em R$ → *Moeda, 2 casas*; percentuais → *Porcentagem, 1 casa*.
 
