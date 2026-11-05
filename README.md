@@ -35,7 +35,7 @@ A Goener cobra os clientes pela energia solar que aparece como **energia compens
 | 3 | Resumo executivo (1 página) | [`output/resumo_executivo.pdf`](output/resumo_executivo.pdf) e seção final do notebook |
 | + | Todos os erros documentados, com decisão e justificativa | [`ERROS_E_LOGS.md`](ERROS_E_LOGS.md) |
 | + | Diferencial: SQL | [`sql/consultas.sql`](sql/consultas.sql) (SQLite, roda no notebook) e [`sql/sqlserver/`](sql/sqlserver/) (versão T-SQL para SQL Server, testada com os mesmos resultados) |
-| + | Diferencial: Power BI | [`docs/GUIA_POWERBI.md`](docs/GUIA_POWERBI.md) + [`output/powerbi/`](output/powerbi/) |
+| + | Diferencial: Power BI | [`docs/GUIA_POWERBI.md`](docs/GUIA_POWERBI.md), dashboard montado sobre o [`output/base_tratada.xlsx`](output/base_tratada.xlsx) |
 | + | Diferencial: Microsoft Fabric / API | [`docs/PROPOSTA_FABRIC.md`](docs/PROPOSTA_FABRIC.md) |
 
 **Abas do `base_tratada.xlsx`:** `conciliacao` · `indicadores_mensais` · `clientes` · `faturas_enel` · `cobrancas_goener` · `log_inconsistencias` · `resumo_log` · `validacao_base_original`
@@ -141,7 +141,7 @@ Case_Goener/
     ├── base_tratada.xlsx
     ├── resumo_executivo.pdf
     ├── graficos/*.png
-    └── powerbi/*.csv          ← modelo estrela (fatos + dimensões)
+    └── powerbi/*.csv          ← mesmas tabelas em CSV (carga do SQL Server)
 ```
 
 ---
