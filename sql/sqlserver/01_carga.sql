@@ -22,6 +22,8 @@ SET NOCOUNT ON;
 DROP TABLE IF EXISTS dbo.conciliacao, dbo.cobrancas, dbo.faturas, dbo.clientes;
 
 -- UC, CPF/CNPJ e ids são TEXTO: preservam os zeros à esquerda.
+-- Números com casas fixas (DECIMAL), para todos aparecerem no mesmo formato:
+--   desconto com 2 casas (0.15, 0.20), tarifa com 4 (0.9184), kWh e valores em R$ com 2.
 CREATE TABLE dbo.clientes (
     linha_origem        INT,
     id_cliente          VARCHAR(10)   NOT NULL PRIMARY KEY,
@@ -30,7 +32,7 @@ CREATE TABLE dbo.clientes (
     tipo_documento      VARCHAR(4),
     uc                  CHAR(10),
     cidade              NVARCHAR(60),
-    desconto_contratado FLOAT,
+    desconto_contratado DECIMAL(4, 2),
     data_adesao         DATE,
     status              VARCHAR(10),
     data_cancelamento   DATE,
@@ -43,9 +45,9 @@ CREATE TABLE dbo.faturas (
     uc                     CHAR(10),
     id_cliente             VARCHAR(10),
     mes_referencia         DATE,
-    consumo_kwh            FLOAT,
-    energia_compensada_kwh FLOAT,
-    tarifa_kwh             FLOAT,
+    consumo_kwh            DECIMAL(12, 2),
+    energia_compensada_kwh DECIMAL(12, 2),
+    tarifa_kwh             DECIMAL(8, 4),
     flag_revisao           VARCHAR(6),  -- True/False no CSV; vira BIT após a carga
     motivo_revisao         NVARCHAR(400)
 );
@@ -55,7 +57,7 @@ CREATE TABLE dbo.cobrancas (
     id_cobranca        VARCHAR(10),
     id_cliente         VARCHAR(10),
     mes_referencia     DATE,
-    valor_cobrado      FLOAT,
+    valor_cobrado      DECIMAL(12, 2),
     data_vencimento    DATE,
     data_pagamento     DATE,
     status_pagamento   VARCHAR(12),
@@ -75,20 +77,20 @@ CREATE TABLE dbo.conciliacao (
     data_cancelamento      DATE,
     uc                     CHAR(10),
     mes_referencia         DATE,
-    consumo_kwh            FLOAT,
-    energia_compensada_kwh FLOAT,
-    tarifa_kwh             FLOAT,
-    desconto_contratado    FLOAT,
-    valor_esperado         FLOAT,
+    consumo_kwh            DECIMAL(12, 2),
+    energia_compensada_kwh DECIMAL(12, 2),
+    tarifa_kwh             DECIMAL(8, 4),
+    desconto_contratado    DECIMAL(4, 2),
+    valor_esperado         DECIMAL(12, 2),
     id_cobranca            VARCHAR(10),
-    valor_cobrado          FLOAT,
-    diferenca              FLOAT,
-    valor_a_maior          FLOAT,
-    valor_a_menor          FLOAT,
-    receita_perdida        FLOAT,
-    valor_indevido         FLOAT,
-    economia_contratada    FLOAT,
-    economia_real          FLOAT,
+    valor_cobrado          DECIMAL(12, 2),
+    diferenca              DECIMAL(12, 2),
+    valor_a_maior          DECIMAL(12, 2),
+    valor_a_menor          DECIMAL(12, 2),
+    receita_perdida        DECIMAL(12, 2),
+    valor_indevido         DECIMAL(12, 2),
+    economia_contratada    DECIMAL(12, 2),
+    economia_real          DECIMAL(12, 2),
     data_vencimento        DATE,
     data_pagamento         DATE,
     status_pagamento       VARCHAR(12),
